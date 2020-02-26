@@ -2,7 +2,6 @@ package restapi
 
 import(
 	"github.com/gin-gonic/gin"
-	"github.com/asmitaneupane/api/models"
 )
 
 //InitializeRoutes for the API

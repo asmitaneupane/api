@@ -10,6 +10,7 @@ import (
   // "../models"
 
   "github.com/gin-gonic/gin"
+  "github.com/asmitaneupane/api/models"
 )
 
 func getAllUsers(c *gin.Context) {
