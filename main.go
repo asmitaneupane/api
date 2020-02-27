@@ -13,7 +13,9 @@ func main()  {
   db := database.ConnectDB()
 
   fmt.Println("Automigrating User")
-  db.AutoMigrate(&models.User{})
+  db.AutoMigrate(&models.User{},
+  &models.Books{}
+  )
   
 //defer execute that function at last
   fmt.Println("Defer Close DB Connection")
