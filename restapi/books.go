@@ -1,102 +1,109 @@
 package restapi
 
 import (
-	"net/http"
-	"github.com/gin-gonic/gin"
-	"github.com/asmitaneupane/api/models"
+
+  //nt/http to handle http request
+  "net/http"
+  //string conversion
+  "strconv"
+  //we need to import models so that Book can be understood
+  // "../models"
+
+  "github.com/gin-gonic/gin"
+  "github.com/asmitaneupane/api/models"
 )
 
-func getAllBooks(c *gin.Context)  {
-	var books []models.Books
-	err :=models.getAllBooks(&books)
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"msg": err.Error(),
-		})
-		return
-	}
-	c.JSON(http.StatusOK, books)
+func getAllBooks(c *gin.Context) {
+  var book []models.Book
+  err := models.GetAllBooks(&book)
+  if err != nil {
+    c.JSON(http.StatusNotFound, gin.H{
+      "msg": err.Error(),
+    })
+    return
+  }
+  c.JSON(http.StatusOK, book)
 }
 
 func getBook(c *gin.Context) {
 
-	var books models.Books
-	id, _ := strconv.Atoi(c.Param("id"))
-	err := models.getBook(&books, uint(id))
-  
-	if err != nil {
-	  c.JSON(http.StatusNotFound, gin.H{
-		"msg": err.Error(),
-	  })
-	  return
-	}
-  
-	c.JSON(http.StatusOK, books)
-  
+  var book models.Book
+  id, _ := strconv.Atoi(c.Param("id"))
+  err := models.GetBook(&book, uint(id))
+
+  if err != nil {
+    c.JSON(http.StatusNotFound, gin.H{
+      "msg": err.Error(),
+    })
+    return
   }
-  
-  func addNewBook(c *gin.Context) {
-	var books models.Books
-	if err := c.ShouldBindJSON(&books); err != nil {
-	  c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
-	  return
-	}
-	err := models.addNewBook(&books)
-  
-	if err != nil {
-	  c.JSON(http.StatusNotFound, gin.H{
-		"msg": err.Error(),
-	  })
-	  return
-	}
-  
-	err = models.getBook(&books, books.ID)
-	if err != nil {
-	  c.JSON(http.StatusNotFound, gin.H{
-		"msg": err.Error(),
-	  })
-	  return
-	}
-  
-	c.JSON(http.StatusOK, books)
-  
+
+  c.JSON(http.StatusOK, book)
+
+}
+
+func addNewBook(c *gin.Context) {
+  var book models.Book
+  if err := c.ShouldBindJSON(&book); err != nil {
+    c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+    return
   }
-  
-  func updateBooks(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
-  
-	var books models.Books
-	if err := c.ShouldBindJSON(&books); err != nil {
-	  c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
-	  return
-	}
-	if err := models.updateBooks(&books, uint(id)); err != nil {
-	  c.JSON(http.StatusNotFound, gin.H{
-		"msg": err.Error(),
-	  })
-	  return
-	}
-  
-	if err := models.getBook(&books, uint(id)); err != nil {
-	  c.JSON(http.StatusNotFound, gin.H{
-		"msg": err.Error(),
-	  })
-	  return
-	}
-	c.JSON(http.StatusOK, &books)
-  
+  err := models.AddNewBook(&book)
+
+  if err != nil {
+    c.JSON(http.StatusNotFound, gin.H{
+      "msg": err.Error(),
+    })
+    return
   }
-  
-  func deleteBook(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
-	err := models.deleteBook(uint(id))
-	if err != nil {
-	  c.JSON(http.StatusNotFound, gin.H{
-		"msg": err.Error(),
-	  })
-	  return
-	}
-	c.JSON(http.StatusOK, gin.H{
-	  "msg": "Book has been deleted",
-	})
+
+  err = models.GetBook(&book, book.ID)
+  if err != nil {
+    c.JSON(http.StatusNotFound, gin.H{
+      "msg": err.Error(),
+    })
+    return
   }
+
+  c.JSON(http.StatusOK, book)
+
+}
+
+func updateBook(c *gin.Context) {
+  id, _ := strconv.Atoi(c.Param("id"))
+
+  var book models.Book
+  if err := c.ShouldBindJSON(&book); err != nil {
+    c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+    return
+  }
+  if err := models.UpdateBook(&book, uint(id)); err != nil {
+    c.JSON(http.StatusNotFound, gin.H{
+      "msg": err.Error(),
+    })
+    return
+  }
+
+  if err := models.GetBook(&book, uint(id)); err != nil {
+    c.JSON(http.StatusNotFound, gin.H{
+      "msg": err.Error(),
+    })
+    return
+  }
+  c.JSON(http.StatusOK, &book)
+
+}
+
+func deleteBook(c *gin.Context) {
+  id, _ := strconv.Atoi(c.Param("id"))
+  err := models.DeleteBook(uint(id))
+  if err != nil {
+    c.JSON(http.StatusNotFound, gin.H{
+      "msg": err.Error(),
+    })
+    return
+  }
+  c.JSON(http.StatusOK, gin.H{
+    "msg": "book has been deleted",
+  })
+}
