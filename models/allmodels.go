@@ -13,7 +13,7 @@ type User struct {
 }
 
 //Books Model
-type Books struct {
+type Book struct {
 	gorm.Model
 	Title string
 	Publisher string
