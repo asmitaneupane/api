@@ -2,27 +2,28 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/asmitaneupane/api/restapi"
-	"github.com/asmitaneupane/api/models"
+
 	"github.com/asmitaneupane/api/database"
+	"github.com/asmitaneupane/api/models"
+	"github.com/asmitaneupane/api/restapi"
+	"github.com/gin-gonic/gin"
 )
 
-func main()  {
+func main() {
 	fmt.Println("Connecting to DB")
-  db := database.ConnectDB()
+	db := database.ConnectDB()
 
-  fmt.Println("Automigrating User")
-  db.AutoMigrate(&models.User{},&models.Books{})
-  
-//defer execute that function at last
-  fmt.Println("Defer Close DB Connection")
-  defer db.Close()
+	fmt.Println("Automigrating User")
+	db.AutoMigrate(&models.User{}, &models.Books{})
 
-  router := gin.Default()
-  r := router.Group("/v1")
-  restapi.InitializeRoutes(r)
+	//defer execute that function at last
+	fmt.Println("Defer Close DB Connection")
+	defer db.Close()
 
-  fmt.Println("Running API")
-  router.Run(":8080")
+	router := gin.Default()
+	r := router.Group("/v1")
+	restapi.InitializeRoutes(r)
+
+	fmt.Println("Running API")
+	router.Run(":8080")
 }
