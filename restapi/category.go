@@ -6,30 +6,30 @@ import (
   "net/http"
   //string conversion
   "strconv"
-  //we need to import models so that Book can be understood
+  //we need to import models so that Category can be understood
   // "../models"
 
   "github.com/gin-gonic/gin"
   "github.com/asmitaneupane/api/models"
 )
 
-func getAllBooks(c *gin.Context) {
-  var books []models.Book
-  err := models.GetAllBooks(&books)
+func getAllCategories(c *gin.Context) {
+  var categories []models.Category
+  err := models.GetAllCategories(&categories)
   if err != nil {
     c.JSON(http.StatusNotFound, gin.H{
       "msg": err.Error(),
     })
     return
   }
-  c.JSON(http.StatusOK, books)
+  c.JSON(http.StatusOK, categories)
 }
 
-func getBook(c *gin.Context) {
+func getCategory(c *gin.Context) {
 
-  var book models.Book
+  var category models.Category
   id, _ := strconv.Atoi(c.Param("id"))
-  err := models.GetBook(&book, uint(id))
+  err := models.GetCategory(&category, uint(id))
 
   if err != nil {
     c.JSON(http.StatusNotFound, gin.H{
@@ -38,17 +38,17 @@ func getBook(c *gin.Context) {
     return
   }
 
-  c.JSON(http.StatusOK, book)
+  c.JSON(http.StatusOK, category)
 
 }
 
-func addNewBook(c *gin.Context) {
-  var book models.Book
-  if err := c.ShouldBindJSON(&book); err != nil {
+func addNewCategory(c *gin.Context) {
+  var category models.Category
+  if err := c.ShouldBindJSON(&category); err != nil {
     c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
     return
   }
-  err := models.AddNewBook(&book)
+  err := models.AddNewCategory(&category)
 
   if err != nil {
     c.JSON(http.StatusNotFound, gin.H{
@@ -57,7 +57,7 @@ func addNewBook(c *gin.Context) {
     return
   }
 
-  err = models.GetBook(&book, book.ID)
+  err = models.GetCategory(&category, category.ID)
   if err != nil {
     c.JSON(http.StatusNotFound, gin.H{
       "msg": err.Error(),
@@ -65,38 +65,38 @@ func addNewBook(c *gin.Context) {
     return
   }
 
-  c.JSON(http.StatusOK, book)
+  c.JSON(http.StatusOK, category)
 
 }
 
-func updateBook(c *gin.Context) {
+func updateCategory(c *gin.Context) {
   id, _ := strconv.Atoi(c.Param("id"))
 
-  var book models.Book
-  if err := c.ShouldBindJSON(&book); err != nil {
+  var category models.Category
+  if err := c.ShouldBindJSON(&category); err != nil {
     c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
     return
   }
-  if err := models.UpdateBook(&book, uint(id)); err != nil {
+  if err := models.UpdateCategory(&category, uint(id)); err != nil {
     c.JSON(http.StatusNotFound, gin.H{
       "msg": err.Error(),
     })
     return
   }
 
-  if err := models.GetBook(&book, uint(id)); err != nil {
+  if err := models.GetCategory(&category, uint(id)); err != nil {
     c.JSON(http.StatusNotFound, gin.H{
       "msg": err.Error(),
     })
     return
   }
-  c.JSON(http.StatusOK, &book)
+  c.JSON(http.StatusOK, &category)
 
 }
 
-func deleteBook(c *gin.Context) {
+func deleteCategory(c *gin.Context) {
   id, _ := strconv.Atoi(c.Param("id"))
-  err := models.DeleteBook(uint(id))
+  err := models.DeleteCategory(uint(id))
   if err != nil {
     c.JSON(http.StatusNotFound, gin.H{
       "msg": err.Error(),
@@ -104,6 +104,6 @@ func deleteBook(c *gin.Context) {
     return
   }
   c.JSON(http.StatusOK, gin.H{
-    "msg": "book has been deleted",
+    "msg": "category has been deleted",
   })
 }
