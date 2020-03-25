@@ -1,6 +1,10 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import (
+	"time"
+
+	"github.com/jinzhu/gorm"
+)
 
 //User Model
 type User struct {
@@ -18,7 +22,7 @@ type Book struct {
 	Title      string
 	Publisher  string
 	Author     string
-	Year       int64
+	Year       string
 	CategoryID int64
 }
 
@@ -28,6 +32,22 @@ type Category struct {
 	CName       string
 	Description string
 	Book        []Book `gorm:"foreignkey:CategoryID"`
+}
+
+//Issue Model
+type IssuedBook struct {
+	gorm.Model
+	UserID    uint
+	BookID    uint
+	IssueDate time.Time
+}
+
+//ReturnedBook Model
+type ReturnedBook struct {
+	gorm.Model
+	BookID     uint
+	UserID     uint
+	ReturnDate time.Time
 }
 
 //Publication Model
